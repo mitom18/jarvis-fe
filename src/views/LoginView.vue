@@ -1,12 +1,21 @@
 <template>
-    <div>
-        <h1>Login</h1>
-        <b-button v-on:click="authorize">Login</b-button>
-    </div>
+    <main class="min-vh-100">
+        <b-jumbotron fluid class="main-header">
+            <template v-slot:header>J.A.R.V.I.S.</template>
+
+            <template v-slot:lead>
+                Sign in to use my service, please.
+            </template>
+
+            <hr class="my-4">
+
+            <b-button v-on:click="authorize">Sign in</b-button>
+        </b-jumbotron>
+    </main>
 </template>
 
 <script>
-    import {mapGetters, mapActions} from "vuex";
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
         name: "login",
@@ -36,5 +45,11 @@
 </script>
 
 <style scoped>
+    main {
+        background-color: #e9ecef;
+    }
 
+    .main-header h1 {
+        letter-spacing: .7rem;
+    }
 </style>

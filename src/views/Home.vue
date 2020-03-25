@@ -1,40 +1,30 @@
 <template>
-    <div>
-        <h1>Hello world</h1>
-        <p v-if="user !== null">{{user.username}}</p>
-        <b-button v-on:click="logout">Logout</b-button>
-    </div>
+    <main class="min-vh-100">
+        <Navbar/>
+        <b-jumbotron fluid>
+            <template v-slot:header>Welcome!</template>
+
+            <template v-slot:lead>
+                How are you today?
+            </template>
+        </b-jumbotron>
+    </main>
 </template>
 
 <script>
-    import {mapActions, mapGetters} from "vuex";
+    import Navbar from "../components/Navbar";
 
     export default {
         name: "Home",
 
-        data() {
-            return {
-                user: null
-            }
-        },
-        computed: {
-            ...mapGetters('auth', [
-                'userInfo'
-            ])
-        },
-        mounted: async function () {
-            await this.userInfo.then(response => {
-                this.user = response.data;
-            })
-        },
-        methods: {
-            ...mapActions('auth', [
-                'logout'
-            ])
+        components: {
+            Navbar
         }
     }
 </script>
 
 <style scoped>
-
+    main {
+        background-color: #e9ecef;
+    }
 </style>

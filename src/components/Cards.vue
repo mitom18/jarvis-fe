@@ -16,8 +16,8 @@
                 </div>
             </b-row>
         </div>
-        <div v-else>
-            <h5>No items available yet 😢</h5>
+        <div v-else class="d-flex justify-content-center mt-5">
+            <b-spinner label="Loading..."></b-spinner>
         </div>
     </b-container>
 </template>
