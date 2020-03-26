@@ -42,8 +42,8 @@ const UserService = {
         ApiService.unmount401Interceptor();
     },
 
-    getUserInfo: async function () {
-        return await ApiService.get('/users/current');
+    getUserInfo: function () {
+        return ApiService.get('/users/current');
     }
 };
 export {UserService, AuthenticationError}

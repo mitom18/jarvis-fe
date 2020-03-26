@@ -25,9 +25,24 @@ const router = new Router({
             }
         },
         {
+            path: '/profile',
+            name: 'profile',
+            component: () => import('./views/ProfileView.vue')
+        },
+        {
             path: '/notes',
             name: 'notes',
             component: () => import('./views/Notes.vue')
+        },
+        {
+            path: '/events',
+            name: 'events',
+            component: () => import('./views/Events.vue')
+        },
+        {
+            path: '/polls',
+            name: 'polls',
+            component: () => import('./views/Polls.vue')
         },
         {
             path: '/about',
@@ -46,6 +61,7 @@ router.beforeEach((to, from, next) => {
     const loggedIn = !!TokenService.getToken();
 
     if (!isPublic && !loggedIn) {
+        // TODO must store URI of the page user wanted to see to the user service
         return next({
             path: '/login',
             query: {redirect: to.fullPath}  // Store the full path to redirect the user to after login

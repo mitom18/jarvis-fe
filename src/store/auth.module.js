@@ -16,7 +16,7 @@ const getters = {
     },
 
     userInfo: (state) => {
-        return state.accessToken ? UserService.getUserInfo() : 'null555';
+        return state.accessToken ? UserService.getUserInfo() : null;
     },
 
     authenticationErrorCode: (state) => {
@@ -45,6 +45,7 @@ const actions = {
             commit('loginSuccess', token);
 
             // Redirect the user to the page he first tried to visit or to the home view
+            // TODO must get the page URI from user service
             await router.push(router.history.current.query.redirect || '/');
 
             return true

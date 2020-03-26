@@ -2,10 +2,10 @@
     <div>
         <Navbar/>
         <b-container class="pt-4">
-            <b-list-group v-if="notes.length">
-                <b-list-group-item v-bind:key="note.index" v-for="note in notes" class="flex-column align-items-start">
+            <b-list-group v-if="polls.length">
+                <b-list-group-item v-bind:key="poll.index" v-for="poll in polls" class="flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{note.name}}</h5>
+                        <h5 class="mb-1">{{poll.name}}</h5>
                         <b-button-group size="sm" class="mr-1">
                             <b-button size="sm" variant="warning">
                                 <b-icon-pencil></b-icon-pencil>
@@ -17,16 +17,16 @@
                     </div>
 
                     <p class="mb-2">
-                        {{note.description}}
+                        {{poll.description}}
                     </p>
 
-                    <small>{{new Date(note.timeCreated).toLocaleDateString()}}</small>
+                    <small>{{new Date(poll.timeCreated).toLocaleDateString()}}</small>
                 </b-list-group-item>
             </b-list-group>
             <div v-else-if="loading" class="d-flex justify-content-center">
                 <b-spinner label="Loading..."></b-spinner>
             </div>
-            <b-alert v-else variant="secondary" show="true">Nenalezeny žádné poznámky.</b-alert>
+            <b-alert v-else variant="secondary" show="true">Nenalezena žádná hlasování.</b-alert>
         </b-container>
     </div>
 </template>
@@ -36,20 +36,20 @@
     import ApiService from "../services/api.service";
 
     export default {
-        name: "Notes",
+        name: "Polls",
         components: {
             Navbar
         },
         data() {
             return {
                 loading: true,
-                notes: []
+                polls: []
             };
         },
         mounted() {
-            ApiService.get('/notes')
+            ApiService.get('/polls')
                 .then(response => {
-                    this.notes = response.data;
+                    this.polls = response.data;
                 })
                 .catch(err => {
                     console.log(err);

@@ -8,12 +8,12 @@
                     <!-- Right aligned nav items -->
                     <b-navbar-nav class="ml-auto white-links">
                         <router-link to="/notes" tag="b-nav-item">Notes</router-link>
-                        <router-link to="/" tag="b-nav-item">Events</router-link>
-                        <router-link to="/" tag="b-nav-item">Polls</router-link>
+                        <router-link to="/events" tag="b-nav-item">Events</router-link>
+                        <router-link to="/polls" tag="b-nav-item">Polls</router-link>
                         <b-nav-item-dropdown right>
                             <!-- Using 'button-content' slot -->
                             <template slot="button-content">{{user ? user.username : ""}}</template>
-                            <b-dropdown-item href="#">Profile</b-dropdown-item>
+                            <router-link to="/profile" tag="b-dropdown-item">Profile</router-link>
                             <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
                         </b-nav-item-dropdown>
                     </b-navbar-nav>
@@ -32,19 +32,16 @@
                 user: null
             }
         },
-
         computed: {
             ...mapGetters('auth', [
                 'userInfo'
             ])
         },
-
-        mounted: async function () {
-            await this.userInfo.then(response => {
+        mounted() {
+            this.userInfo.then(response => {
                 this.user = response.data;
             })
         },
-
         methods: {
             ...mapActions('auth', [
                 'logout'
@@ -57,7 +54,6 @@
     .white-links >>> a.nav-link {
         color: white !important;
     }
-
     .router-link-exact-active {
         font-weight: bold;
     }
