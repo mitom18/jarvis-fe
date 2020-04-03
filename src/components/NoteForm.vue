@@ -1,6 +1,6 @@
 <template>
     <b-form @submit.stop.prevent="onSubmit">
-        <b-form-group id="input-group-1" label="Name:" label-for="name" label-class="required">
+        <b-form-group v-if="!editing" id="input-group-1" label="Name:" label-for="name" label-class="required">
             <b-form-input
                     id="name"
                     v-model="$v.form.name.$model"
@@ -37,9 +37,22 @@
 
     export default {
         name: "NoteForm",
+        props: ['note'],
         data() {
+            console.log(this.note);
+            if (this.note) {
+                return {
+                    user: null,
+                    editing: true,
+                    form: {
+                        name: this.note.name,
+                        description: this.note.description
+                    }
+                }
+            }
             return {
                 user: null,
+                editing: false,
                 form: {
                     name: '',
                     description: ''
@@ -87,6 +100,13 @@
                     return;
                 }
 
+                if (!this.editing) {
+                    this.createNote();
+                } else {
+                    this.editNote();
+                }
+            },
+            createNote() {
                 ApiService.post('/notes', {
                     name: this.form.name,
                     description: this.form.description,
@@ -98,9 +118,21 @@
                     this.resetForm();
                     this.$emit('refreshNotes');
                 }).catch(err => {
-                    this.$errorMsg(err);
                     console.error(err);
+                    this.$errorMsg(err);
                 })
+            },
+            editNote() {
+                ApiService.put('/notes/' + this.form.name, this.form.description)
+                    .then(response => {
+                        console.log(response);
+                        this.$successMsg('Note ' + this.form.name + ' successfully edited.');
+                        this.resetForm();
+                        this.$emit('refreshNotes');
+                    }).catch(err => {
+                        console.error(err);
+                        this.$errorMsg(err);
+                    });
             }
         }
     }
