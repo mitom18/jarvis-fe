@@ -2,59 +2,41 @@
     <div>
         <Navbar/>
         <b-container class="pt-4">
-            <b-list-group v-if="notes.length">
-                <b-list-group-item v-bind:key="note.index" v-for="note in notes" class="flex-column align-items-start">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{note.name}}</h5>
-                        <b-button-group size="sm" class="mr-1">
-                            <b-button size="sm" variant="warning">
-                                <b-icon-pencil></b-icon-pencil>
-                            </b-button>
-                            <b-button size="sm" variant="danger">
-                                <b-icon-trash></b-icon-trash>
-                            </b-button>
-                        </b-button-group>
-                    </div>
-
-                    <p class="mb-2">
-                        {{note.description}}
-                    </p>
-
-                    <small>{{new Date(note.timeCreated).toLocaleDateString()}}</small>
-                </b-list-group-item>
-            </b-list-group>
-            <div v-else-if="loading" class="d-flex justify-content-center">
-                <b-spinner label="Loading..."></b-spinner>
+            <div class="mb-2">
+                <b-button size="sm" variant="primary" v-b-toggle.new-note-form>+ New note</b-button>
+                <b-collapse id="new-note-form" class="mt-2">
+                    <b-card>
+                        <NoteForm @refreshNotes="handleRefresh"/>
+                    </b-card>
+                </b-collapse>
             </div>
-            <b-alert v-else variant="secondary" show="true">Nenalezeny žádné poznámky.</b-alert>
+            <NotesList :key="renderKey"/>
         </b-container>
     </div>
 </template>
 
 <script>
     import Navbar from "../components/Navbar";
-    import ApiService from "../services/api.service";
+    import NotesList from "../components/NotesList";
+    import NoteForm from "../components/NoteForm";
 
     export default {
         name: "Notes",
         components: {
-            Navbar
+            Navbar,
+            NotesList,
+            NoteForm
         },
         data() {
             return {
-                loading: true,
-                notes: []
+                renderKey: 0
             };
         },
-        mounted() {
-            ApiService.get('/notes')
-                .then(response => {
-                    this.notes = response.data;
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-                .finally(() => this.loading = false);
+        methods: {
+            handleRefresh() {
+                this.renderKey++;
+                this.$root.$emit('bv::toggle::collapse', 'new-note-form');
+            }
         }
     }
 </script>

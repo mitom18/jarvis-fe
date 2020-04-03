@@ -5,6 +5,7 @@
             <template v-slot:header>Welcome!</template>
 
             <template v-slot:lead>
+                <!--TODO more randomized messages-->
                 How are you today?
             </template>
         </b-jumbotron>
