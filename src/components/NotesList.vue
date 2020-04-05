@@ -2,12 +2,30 @@
     <b-list-group v-if="!loading && notes.length">
         <!-- TODO add filters from BE part of application -->
         <b-list-group-item>
-            <b-form-select v-model="selectedSort"
-                           :options="sortOptions"
-                           size="sm"
-                           class="w-25"
-                           @change="loadNotes"
-            ></b-form-select>
+            <b-form inline>
+                <label class="mr-sm-2" for="month-select">Month:</label>
+                <b-select id="month-select"
+                          :options="months"
+                          v-model="selectedMonth"
+                          class="mr-sm-2"
+                ></b-select>
+                <label class="mr-sm-2" for="year-select">Year:</label>
+                <b-select id="year-select"
+                          :options="years"
+                          v-model="selectedYear"
+                          class="mr-sm-2"
+                ></b-select>
+                <b-button type="submit" @click="filterNotes">Filter</b-button>
+            </b-form>
+            <b-form inline class="d-flex justify-content-end">
+                <label class="mr-sm-2" for="sort-select">Sort:</label>
+                <b-select id="sort-select"
+                          v-model="selectedSort"
+                          :options="sortOptions"
+                          size="sm"
+                          @change="loadNotes"
+                ></b-select>
+            </b-form>
         </b-list-group-item>
         <b-list-group-item v-bind:key="note.name" v-for="note in notes" class="flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
@@ -48,13 +66,39 @@
             NoteForm
         },
         data() {
+            const date = new Date();
             return {
                 loading: true,
+                selectedYear: date.getFullYear(),
+                years: [
+                    {value: null, text: 'All'},
+                    {value: 2016, text: '2016'},
+                    {value: 2017, text: '2017'},
+                    {value: 2018, text: '2018'},
+                    {value: 2019, text: '2019'},
+                    {value: 2020, text: '2020'}
+                ],
+                selectedMonth: date.getMonth() + 1,
+                months: [
+                    {value: null, text: 'All'},
+                    {value: 1, text: 'January'},
+                    {value: 2, text: 'February'},
+                    {value: 3, text: 'March'},
+                    {value: 4, text: 'April'},
+                    {value: 5, text: 'May'},
+                    {value: 6, text: 'June'},
+                    {value: 7, text: 'July'},
+                    {value: 8, text: 'August'},
+                    {value: 9, text: 'September'},
+                    {value: 10, text: 'October'},
+                    {value: 11, text: 'November'},
+                    {value: 12, text: 'December'}
+                ],
                 notes: [],
                 selectedSort: 'desc',
                 sortOptions: [
-                    { value: 'desc', text: 'Newest first'},
-                    { value: 'asc', text: 'Oldest first' }
+                    {value: 'desc', text: 'Newest first'},
+                    {value: 'asc', text: 'Oldest first'}
                 ],
                 sortFunctions: {
                     desc: (a, b) => {
@@ -77,6 +121,27 @@
             handleRefresh(modalId) {
                 this.loadNotes();
                 this.$bvModal.hide(modalId);
+            },
+
+            filterNotes() {
+                if (this.selectedMonth == null || this.selectedYear == null) {
+                    this.loadNotes();
+                    return;
+                }
+
+                this.loading = true;
+                // TODO fix filtering
+                ApiService.getWithParams('/notes/date', {
+                    year: this.selectedYear,
+                    month: this.selectedMonth
+                })
+                    .then(response => {
+                        this.notes = response.data;
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                    .finally(() => this.loading = false);
             },
 
             loadNotes() {

@@ -24,6 +24,10 @@ const ApiService = {
         return axios.get(resource)
     },
 
+    getWithParams(resource, data) {
+        return axios.get(resource, data)
+    },
+
     post(resource, data) {
         return axios.post(resource, data)
     },

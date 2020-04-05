@@ -3,14 +3,14 @@ import router from './router'
 import store from './store'
 import {BootstrapVue, BootstrapVueIcons} from 'bootstrap-vue'
 import Vuelidate from 'vuelidate'
-import VueNotification from "vue-notification";
+import VueNotification from "vue-notification"
 import {TokenService} from './services/storage.service'
 import ApiService from './services/api.service'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css'
 import App from "./App"
-import NotificationService from "./services/notification.service";
+import NotificationService from "./services/notification.service"
 
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
