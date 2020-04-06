@@ -158,7 +158,7 @@
             },
 
             deleteNote(noteName) {
-                if (confirm('Do you really want to delete note ' + noteName + '?')) {
+                if (confirm('Do you really want to delete note "' + noteName + '"?')) {
                     ApiService.delete('/notes/' + noteName)
                         .then(response => {
                             console.log(response);

@@ -4,11 +4,13 @@ import store from './store'
 import {BootstrapVue, BootstrapVueIcons} from 'bootstrap-vue'
 import Vuelidate from 'vuelidate'
 import VueNotification from "vue-notification"
+import {Datetime} from 'vue-datetime'
 import {TokenService} from './services/storage.service'
 import ApiService from './services/api.service'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css'
+import 'vue-datetime/dist/vue-datetime.css'
 import App from "./App"
 import NotificationService from "./services/notification.service"
 
@@ -16,6 +18,7 @@ Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 Vue.use(Vuelidate);
 Vue.use(VueNotification);
+Vue.component('datetime', Datetime);
 Vue.config.productionTip = false;
 
 // Set the base URL of the API
