@@ -4,42 +4,69 @@
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">{{event.name}}</h5>
                 <b-button-group size="sm" class="mr-1">
-                    <b-button size="sm" variant="primary">
-                        <b-icon-people/>
-                    </b-button>
-                    <b-button size="sm" variant="warning" v-b-modal="'edit-' + event.name">
+                    <b-button v-if="event.author.id === user.id"
+                              size="sm"
+                              variant="warning"
+                              v-b-modal="'edit-' + event.name"
+                              v-b-tooltip="'Edit event'"
+                    >
                         <b-icon-pencil/>
                     </b-button>
-                    <b-button v-if="event.author.id === user.id" size="sm" variant="danger" @click="deleteEvent(event)">
+                    <b-button v-if="event.author.id === user.id"
+                              size="sm"
+                              variant="danger"
+                              @click="deleteEvent(event)"
+                              v-b-tooltip="'Delete event'"
+                    >
                         <b-icon-trash/>
                     </b-button>
                 </b-button-group>
             </div>
 
-            <b-modal :id="'edit-' + event.name" centered :title="event.name" hide-footer>
+            <table class="time-table mt-2 mb-3">
+                <tr>
+                    <td class="pr-3">
+                        <b-icon-clock/>
+                        From:
+                    </td>
+                    <td>{{event.startTime}}</td>
+                </tr>
+                <tr>
+                    <td class="pr-3">
+                        <b-icon-clock/>
+                        To:
+                    </td>
+                    <td>{{event.endTime}}</td>
+                </tr>
+            </table>
+
+            <b-modal v-if="event.author.id === user.id" :id="'edit-' + event.name" centered :title="event.name"
+                     hide-footer>
                 <EventForm :event="event" @refreshEvents="handleRefresh('edit-' + event.name)"/>
             </b-modal>
 
-            <p class="mb-2">
+            <p class="mb-3">
                 {{event.description}}
             </p>
 
-            <small>{{event.startTime}} - {{event.endTime}}</small>
+            <EventParticipants :event="event" @refreshEvents="handleRefresh()"/>
         </b-list-group-item>
     </b-list-group>
     <div v-else-if="loading" class="d-flex justify-content-center">
         <b-spinner label="Loading..."></b-spinner>
     </div>
-    <b-alert v-else variant="secondary" show="true">No events found.</b-alert>
+    <b-alert v-else variant="secondary" :show="true">No events found.</b-alert>
 </template>
 
 <script>
     import ApiService from "../services/api.service";
     import EventForm from "./EventForm";
     import {mapGetters} from "vuex";
+    import EventParticipants from "./EventParticipants";
 
     export default {
         components: {
+            EventParticipants,
             EventForm
         },
         data() {
@@ -78,9 +105,9 @@
             this.loadEvents();
         },
         methods: {
-            handleRefresh(modalId) {
+            handleRefresh(modalId = null) {
                 this.loadEvents();
-                this.$bvModal.hide(modalId);
+                if (modalId !== null) this.$bvModal.hide(modalId);
             },
 
             loadEvents() {
@@ -88,7 +115,6 @@
                 ApiService.get('/events')
                     .then(response => {
                         this.events = response.data;
-                        console.log(this.events);
                         this.events.sort(this.sortFunctions[this.selectedSort]);
                     })
                     .catch(err => {
@@ -98,11 +124,11 @@
             },
 
             deleteEvent(event) {
-                if (confirm('Do you really want to delete event "' + event.name + '"?')) {
+                if (confirm('Do you really want to cancel event "' + event.name + '"?')) {
                     ApiService.delete('/events/' + event.id)
                         .then(response => {
                             console.log(response);
-                            this.$successMsg('Event ' + event.name + ' was successfully deleted.');
+                            this.$successMsg('Event ' + event.name + ' was successfully canceled.');
                             this.loadEvents();
                         })
                         .catch(err => {
@@ -114,3 +140,9 @@
         }
     };
 </script>
+
+<style scoped>
+    .time-table {
+        font-weight: bold;
+    }
+</style>

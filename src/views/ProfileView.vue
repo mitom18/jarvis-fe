@@ -20,8 +20,8 @@
                         <tr>
                             <th class="w-25">Role</th>
                             <td>
-                                <b-badge v-if="user.admin" variant="primary">Administrátor</b-badge>
-                                <b-badge v-else>Uživatel</b-badge>
+                                <b-badge v-if="user.admin" variant="primary">Administrator</b-badge>
+                                <b-badge v-else>User</b-badge>
                             </td>
                         </tr>
                     </table>

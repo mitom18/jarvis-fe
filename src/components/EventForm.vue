@@ -82,7 +82,6 @@
         name: "EventForm",
         props: ['event'],
         data() {
-            console.log(this.event);
             if (this.event) {
                 return {
                     user: null,

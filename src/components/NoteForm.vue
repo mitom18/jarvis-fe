@@ -39,7 +39,6 @@
         name: "NoteForm",
         props: ['note'],
         data() {
-            console.log(this.note);
             if (this.note) {
                 return {
                     user: null,

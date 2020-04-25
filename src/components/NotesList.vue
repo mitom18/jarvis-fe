@@ -54,7 +54,7 @@
     <div v-else-if="loading" class="d-flex justify-content-center">
         <b-spinner label="Loading..."></b-spinner>
     </div>
-    <b-alert v-else variant="secondary" show="true">No notes found.</b-alert>
+    <b-alert v-else variant="secondary" :show="true">No notes found.</b-alert>
 </template>
 
 <script>
