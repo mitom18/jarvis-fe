@@ -122,16 +122,18 @@
                 })
             },
             editNote() {
-                ApiService.put('/notes/' + this.form.name, this.form.description)
-                    .then(response => {
-                        console.log(response);
-                        this.$successMsg('Note ' + this.form.name + ' successfully edited.');
-                        this.resetForm();
-                        this.$emit('refreshNotes');
-                    }).catch(err => {
-                        console.error(err);
-                        this.$errorMsg(err);
-                    });
+                ApiService.put('/notes/' + this.form.name, {
+                    ...this.note,
+                    description: this.form.description
+                }).then(response => {
+                    console.log(response);
+                    this.$successMsg('Note ' + this.form.name + ' successfully edited.');
+                    this.resetForm();
+                    this.$emit('refreshNotes');
+                }).catch(err => {
+                    console.error(err);
+                    this.$errorMsg(err);
+                });
             }
         }
     }
