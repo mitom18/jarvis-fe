@@ -31,10 +31,16 @@
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">{{note.name}}</h5>
                 <b-button-group size="sm" class="mr-1">
-                    <b-button size="sm" variant="warning" v-b-modal="'edit-' + note.name">
+                    <b-button size="sm"
+                              variant="warning"
+                              v-b-modal="'edit-' + note.name"
+                              v-b-tooltip="'Edit note'">
                         <b-icon-pencil/>
                     </b-button>
-                    <b-button size="sm" variant="danger" @click="deleteNote(note.name)">
+                    <b-button size="sm"
+                              variant="danger"
+                              @click="deleteNote(note.name)"
+                              v-b-tooltip="'Delete note'">
                         <b-icon-trash/>
                     </b-button>
                 </b-button-group>

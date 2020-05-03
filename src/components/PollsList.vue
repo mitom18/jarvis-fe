@@ -4,17 +4,23 @@
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">{{poll.name}}</h5>
                 <b-button-group size="sm" class="mr-1">
-                    <b-button size="sm" variant="warning" v-b-modal="'edit-' + poll.name">
+                    <b-button size="sm"
+                              variant="warning"
+                              v-b-modal="'edit-' + poll.name"
+                              v-b-tooltip="'Edit poll'">
                         <b-icon-pencil/>
                     </b-button>
-                    <b-button size="sm" variant="danger">
+                    <b-button size="sm"
+                              variant="danger"
+                              @click="deletePoll(poll.name)"
+                              v-b-tooltip="'Delete poll'">
                         <b-icon-trash/>
                     </b-button>
                 </b-button-group>
             </div>
 
             <b-modal :id="'edit-' + poll.name" centered :title="poll.name" hide-footer>
-                <NoteForm :note="poll" @refreshNotes="handleRefresh('edit-' + poll.name)"/>
+                <PollForm :poll="poll" @refreshNotes="handleRefresh('edit-' + poll.name)"/>
             </b-modal>
 
             <p class="mb-2">
@@ -30,11 +36,11 @@
 
 <script>
     import ApiService from "../services/api.service";
-    import NoteForm from "./NoteForm";
+    import PollForm from "./PollForm";
 
     export default {
         components: {
-            NoteForm
+            PollForm
         },
         data() {
             return {
@@ -79,6 +85,21 @@
                         console.log(err);
                     })
                     .finally(() => this.loading = false);
+            },
+
+            deletePoll(pollName) {
+                if (confirm('Do you really want to delete poll "' + pollName + '"?')) {
+                    ApiService.delete('/polls/' + pollName)
+                        .then(response => {
+                            console.log(response);
+                            this.$successMsg('Poll ' + pollName + ' was successfully deleted.');
+                            this.loadPolls();
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            this.$errorMsg(err);
+                        })
+                }
             }
         }
     };

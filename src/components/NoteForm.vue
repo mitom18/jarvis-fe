@@ -13,13 +13,13 @@
             </b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group id="input-group-2" label="Description:" label-for="description" label-class="required">
+        <b-form-group id="input-group-2" label="Note:" label-for="description" label-class="required">
             <b-form-input
                     id="description"
                     v-model="$v.form.description.$model"
                     :state="validateState('description')"
                     aria-describedby="description-feedback"
-                    placeholder="Enter description"
+                    placeholder="Enter note"
             ></b-form-input>
             <b-form-invalid-feedback id="description-feedback">
                 This is a required field.

@@ -27,25 +27,44 @@
         </b-form-group>
 
         <b-form-group v-bind:key="index" v-for="(v, index) in $v.form.options.$each.$iter" :id="'input-group-'+index"
-                      :label="'Poll option '+index+':'" :label-for="'option'+index" label-class="required">
-            <b-form-input
-                    :id="'option'+index"
-                    v-model="v.name.$model"
-                    :state="validateState(index, true)"
-                    :aria-describedby="'option'+index+'-feedback'"
-                    :placeholder="'Enter option '+index"
-            ></b-form-input>
-            <b-form-invalid-feedback :id="'option'+index+'-feedback'">
-                This is a required field.
-            </b-form-invalid-feedback>
+                      :label="'Poll option '+(Number.parseInt(index)+1)+':'" :label-for="'option'+index"
+                      label-class="required">
+            <b-input-group>
+                <b-form-input
+                        :id="'option'+index"
+                        v-model="v.name.$model"
+                        :state="validateState(v.name, true)"
+                        :aria-describedby="'option'+index+'-feedback'"
+                        :placeholder="'Enter option '+(Number.parseInt(index)+1)"
+                ></b-form-input>
+                <b-input-group-append>
+                    <b-button size="sm"
+                              variant="danger"
+                              @click="removePollOption(index)"
+                              v-b-tooltip="'Remove poll option'">
+                        <b-icon-x/>
+                    </b-button>
+                </b-input-group-append>
+                <b-form-invalid-feedback :id="'option'+index+'-feedback'">
+                    This is a required field.
+                </b-form-invalid-feedback>
+            </b-input-group>
+
         </b-form-group>
 
+        <b-button size="sm"
+                  variant="secondary"
+                  class="mr-1"
+                  @click="addPollOption"
+                  v-b-tooltip="'Add poll option'">
+            <b-icon-plus/>
+        </b-button>
         <b-button size="sm" variant="primary" type="submit">Save</b-button>
     </b-form>
 </template>
 
 <script>
-    import {required, minLength} from "vuelidate/lib/validators";
+    import {required} from "vuelidate/lib/validators";
     import ApiService from "../services/api.service";
     import {mapGetters} from "vuex";
 
@@ -61,8 +80,10 @@
                         id: this.poll.id,
                         name: this.poll.name,
                         description: this.poll.description,
-                        options: this.poll.options
-                    }
+                        options: this.poll.pollOptions
+                    },
+                    minOptions: 1,
+                    maxOptions: 3
                 }
             }
             return {
@@ -77,7 +98,9 @@
                         icon: '',
                         votes: []
                     }]
-                }
+                },
+                minOptions: 1,
+                maxOptions: 3
             }
         },
         computed: {
@@ -101,7 +124,6 @@
                 },
                 options: {
                     required,
-                    minLength: minLength(1),
                     $each: {
                         name: {
                             required
@@ -114,9 +136,28 @@
             }
         },
         methods: {
-            validateState(name, isOption = false) {
-                // TODO change validation for options
-                const input = isOption ? name : this.$v.form[name];
+            addPollOption() {
+                if (this.form.options.length >= this.maxOptions) {
+                    alert(`Poll can have max ${this.maxOptions} options!`);
+                    return;
+                }
+                this.form.options.push({
+                    name: '',
+                    icon: '',
+                    votes: []
+                });
+            },
+            removePollOption(index) {
+                if (this.form.options.length <= this.minOptions) {
+                    alert(`Poll must have at least ${this.minOptions} options!`);
+                    return;
+                }
+                this.form.options = this.form.options.filter((item, i) => {
+                    return i !== Number.parseInt(index);
+                });
+            },
+            validateState(element, isOption = false) {
+                const input = isOption ? element : this.$v.form[element];
                 if (input === undefined) return null;
                 const {$dirty, $error} = input;
                 return $dirty ? !$error : null;
@@ -144,7 +185,7 @@
                 if (this.$v.form.$anyError || this.user === null) {
                     return;
                 }
-
+                // TODO map poll options and give them emote icons
                 if (!this.editing) {
                     this.createPoll();
                 } else {
