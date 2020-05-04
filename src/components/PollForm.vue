@@ -46,7 +46,7 @@
                     </b-button>
                 </b-input-group-append>
                 <b-form-invalid-feedback :id="'option'+index+'-feedback'">
-                    This is a required field.
+                    This is a required field and all poll options must be unique.
                 </b-form-invalid-feedback>
             </b-input-group>
 
@@ -112,6 +112,9 @@
             this.userInfo.then(response => {
                 this.user = response.data;
             });
+            ApiService.get('/discord_api/emojis').then(response => {
+                this.maxOptions = response.data.length;
+            });
             this.resetValidators();
         },
         validations: {
@@ -126,10 +129,15 @@
                     required,
                     $each: {
                         name: {
-                            required
-                        },
-                        icon: {
-                            required
+                            required,
+                            isUnique(value) {
+                                if (value === '') return true;
+                                console.log(value);
+                                return this.$v.form.options.$model.filter(item => {
+                                    console.log(item.name === value)
+                                    return item.name === value;
+                                }).length <= 1;
+                            }
                         }
                     }
                 }
@@ -185,14 +193,15 @@
                 if (this.$v.form.$anyError || this.user === null) {
                     return;
                 }
-                // TODO map poll options and give them emote icons
+
                 if (!this.editing) {
                     this.createPoll();
                 } else {
                     this.editPoll();
                 }
             },
-            createPoll() {
+            async createPoll() {
+                await this.giveEmojisToOptions();
                 ApiService.post('/polls', {
                     name: this.form.name,
                     description: this.form.description,
@@ -209,7 +218,8 @@
                     this.$errorMsg(err);
                 })
             },
-            editPoll() {
+            async editPoll() {
+                await this.giveEmojisToOptions();
                 ApiService.put('/polls/' + this.form.id, {
                     name: this.form.name,
                     description: this.form.description,
@@ -224,6 +234,16 @@
                 }).catch(err => {
                     console.error(err);
                     this.$errorMsg(err);
+                });
+            },
+            async giveEmojisToOptions() {
+                let emojis = (await ApiService.get('/discord_api/emojis')).data;
+                console.log(emojis)
+                this.form.options = this.form.options.map(option => {
+                    return {
+                        ...option,
+                        icon: emojis.pop()
+                    }
                 });
             }
         }

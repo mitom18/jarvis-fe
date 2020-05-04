@@ -1,6 +1,6 @@
 <template>
     <b-list-group v-if="!loading && events.length">
-        <b-list-group-item v-bind:key="event.name" v-for="event in events" class="flex-column align-items-start">
+        <b-list-group-item v-bind:key="event.id" v-for="event in events" class="flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">{{event.name}}</h5>
                 <b-button-group size="sm" class="mr-1">
