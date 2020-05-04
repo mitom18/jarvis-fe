@@ -3,6 +3,7 @@
         <b-navbar toggleable="lg" type="dark" variant="secondary">
             <b-container>
                 <b-navbar-brand href="/">J.A.R.V.I.S.</b-navbar-brand>
+                <Clock/>
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
                 <b-collapse id="nav-collapse" is-nav>
                     <!-- Right aligned nav items -->
@@ -25,8 +26,12 @@
 
 <script>
     import {mapActions, mapGetters} from "vuex";
+    import Clock from "./Clock";
 
     export default {
+        components: {
+            Clock
+        },
         data() {
             return {
                 user: null
@@ -54,7 +59,14 @@
     .white-links >>> a.nav-link {
         color: white !important;
     }
+
     .router-link-exact-active {
         font-weight: bold;
+    }
+
+    @media screen and (max-width: 992px) {
+        a.navbar-brand {
+            margin-right: 0;
+        }
     }
 </style>
