@@ -45,6 +45,7 @@
         background: black;
         padding: .2rem .4rem;
         margin: .1rem;
+        border-radius: .2rem;
 
         -webkit-box-shadow: 2px 7px 5px 0 rgba(0, 0, 0, 0.5);
         -moz-box-shadow: 2px 7px 5px 0 rgba(0, 0, 0, 0.5);

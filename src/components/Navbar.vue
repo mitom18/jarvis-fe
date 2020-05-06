@@ -2,7 +2,7 @@
     <div>
         <b-navbar toggleable="lg" type="dark" variant="secondary">
             <b-container>
-                <b-navbar-brand href="/">J.A.R.V.I.S.</b-navbar-brand>
+                <router-link :to="'/'" tag="b-navbar-brand">J.A.R.V.I.S.</router-link>
                 <Clock/>
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
                 <b-collapse id="nav-collapse" is-nav>
@@ -62,6 +62,11 @@
 
     .router-link-exact-active {
         font-weight: bold;
+    }
+
+    .navbar-brand {
+        font-weight: normal;
+        cursor: pointer;
     }
 
     @media screen and (max-width: 992px) {

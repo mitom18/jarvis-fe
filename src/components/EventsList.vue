@@ -4,7 +4,7 @@
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">{{event.name}}</h5>
                 <b-button-group size="sm" class="mr-1">
-                    <b-button v-if="event.author.id === user.id"
+                    <b-button v-if="user !== null && event.author.id === user.id"
                               size="sm"
                               variant="warning"
                               v-b-modal="'edit-' + event.name"
@@ -12,7 +12,7 @@
                     >
                         <b-icon-pencil/>
                     </b-button>
-                    <b-button v-if="event.author.id === user.id"
+                    <b-button v-if="user !== null && event.author.id === user.id"
                               size="sm"
                               variant="danger"
                               @click="deleteEvent(event)"
@@ -40,8 +40,8 @@
                 </tr>
             </table>
 
-            <b-modal v-if="event.author.id === user.id" :id="'edit-' + event.name" centered :title="event.name"
-                     hide-footer>
+            <b-modal v-if="user !== null && event.author.id === user.id" :id="'edit-' + event.name" centered
+                     :title="event.name" hide-footer>
                 <EventForm :event="event" @refreshEvents="handleRefresh('edit-' + event.name)"/>
             </b-modal>
 

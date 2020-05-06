@@ -2,7 +2,7 @@
     <main class="min-vh-100">
         <Navbar/>
         <b-jumbotron fluid>
-            <template v-slot:header>Welcome!</template>
+            <template v-slot:header>{{greetings}}</template>
 
             <template v-slot:lead>
                 {{joke}}
@@ -20,19 +20,31 @@
             Navbar
         },
         data() {
+            const hours = (new Date()).getHours();
+            let greetings = 'Greetings!';
+            if (hours > 6 && hours <= 12) {
+                greetings = 'Good morning!';
+            } else if (hours > 12 && hours <= 17) {
+                greetings = 'Good afternoon!';
+            } else if (hours > 17 && hours <= 20) {
+                greetings = 'Good evening!';
+            } else {
+                greetings = 'Good night!';
+            }
             return {
-                joke: ''
+                joke: '',
+                greetings
             }
         },
         mounted() {
-            fetch('https://geek-jokes.sameerkumar.website/api')
-                .then(response => response.json())
+            fetch('https://sv443.net/jokeapi/v2/joke/Programming?format=txt&type=single')
+                .then(response => response.text())
                 .then(data => {
                     this.joke = data;
                 })
                 .catch(error => {
                     console.error(error);
-                    this.joke = 'How are you today?';
+                    this.joke = '// This line doesn\'t actually do anything, but the code stops working when I delete it.';
                 })
         }
     }

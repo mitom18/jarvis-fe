@@ -4,14 +4,14 @@
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">{{poll.name}}</h5>
                 <b-button-group size="sm" class="mr-1">
-                    <b-button v-if="poll.author.id === user.id"
+                    <b-button v-if="user !== null && poll.author.id === user.id && !poll.finished"
                               size="sm"
                               variant="warning"
                               v-b-modal="'edit-' + poll.id"
                               v-b-tooltip="'Edit poll'">
                         <b-icon-pencil/>
                     </b-button>
-                    <b-button v-if="user.admin && !poll.finished"
+                    <b-button v-if="user !== null && user.admin && !poll.finished"
                               size="sm"
                               variant="danger"
                               @click="deletePoll(poll)"
@@ -21,7 +21,8 @@
                 </b-button-group>
             </div>
 
-            <b-modal :id="'edit-' + poll.id" centered :title="poll.name" hide-footer>
+            <b-modal v-if="user !== null && poll.author.id === user.id && !poll.finished" :id="'edit-' + poll.id"
+                     centered :title="poll.name" hide-footer>
                 <PollForm :poll="poll" @refreshPolls="handleRefresh('edit-' + poll.id)"/>
             </b-modal>
 
@@ -29,7 +30,7 @@
                 {{poll.description}}
             </p>
 
-<!--            TODO poll voting <EventParticipants :event="event" @refreshEvents="handleRefresh()"/>-->
+            <PollVotes :poll="poll" @refreshPolls="handleRefresh()"/>
         </b-list-group-item>
     </b-list-group>
     <div v-else-if="loading" class="d-flex justify-content-center">
@@ -42,9 +43,11 @@
     import ApiService from "../services/api.service";
     import PollForm from "./PollForm";
     import {mapGetters} from "vuex";
+    import PollVotes from "./PollVotes";
 
     export default {
         components: {
+            PollVotes,
             PollForm
         },
         data() {

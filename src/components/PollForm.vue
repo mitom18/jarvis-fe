@@ -26,33 +26,37 @@
             </b-form-invalid-feedback>
         </b-form-group>
 
-        <b-form-group v-bind:key="index" v-for="(v, index) in $v.form.options.$each.$iter" :id="'input-group-'+index"
-                      :label="'Poll option '+(Number.parseInt(index)+1)+':'" :label-for="'option'+index"
-                      label-class="required">
-            <b-input-group>
-                <b-form-input
-                        :id="'option'+index"
-                        v-model="v.name.$model"
-                        :state="validateState(v.name, true)"
-                        :aria-describedby="'option'+index+'-feedback'"
-                        :placeholder="'Enter option '+(Number.parseInt(index)+1)"
-                ></b-form-input>
-                <b-input-group-append>
-                    <b-button size="sm"
-                              variant="danger"
-                              @click="removePollOption(index)"
-                              v-b-tooltip="'Remove poll option'">
-                        <b-icon-x/>
-                    </b-button>
-                </b-input-group-append>
-                <b-form-invalid-feedback :id="'option'+index+'-feedback'">
-                    This is a required field and all poll options must be unique.
-                </b-form-invalid-feedback>
-            </b-input-group>
+        <div v-if="!editing">
+            <b-form-group v-bind:key="index" v-for="(v, index) in $v.form.options.$each.$iter"
+                          :id="'input-group-'+index"
+                          :label="'Poll option '+(Number.parseInt(index)+1)+':'" :label-for="'option'+index"
+                          label-class="required">
+                <b-input-group>
+                    <b-form-input
+                            :id="'option'+index"
+                            v-model="v.name.$model"
+                            :state="validateState(v.name, true)"
+                            :aria-describedby="'option'+index+'-feedback'"
+                            :placeholder="'Enter option '+(Number.parseInt(index)+1)"
+                    ></b-form-input>
+                    <b-input-group-append>
+                        <b-button size="sm"
+                                  variant="danger"
+                                  @click="removePollOption(index)"
+                                  v-b-tooltip="'Remove poll option'">
+                            <b-icon-x/>
+                        </b-button>
+                    </b-input-group-append>
+                    <b-form-invalid-feedback :id="'option'+index+'-feedback'">
+                        This is a required field and all poll options must be unique.
+                    </b-form-invalid-feedback>
+                </b-input-group>
 
-        </b-form-group>
+            </b-form-group>
+        </div>
 
-        <b-button size="sm"
+        <b-button v-if="!editing"
+                  size="sm"
                   variant="secondary"
                   class="mr-1"
                   @click="addPollOption"
@@ -83,7 +87,8 @@
                         options: this.poll.pollOptions
                     },
                     minOptions: 1,
-                    maxOptions: 3
+                    maxOptions: 3,
+                    originalOptions: this.poll.pollOptions
                 }
             }
             return {
@@ -221,14 +226,12 @@
             async editPoll() {
                 await this.giveEmojisToOptions();
                 ApiService.put('/polls/' + this.form.id, {
-                    name: this.form.name,
+                    ...this.poll,
                     description: this.form.description,
-                    author: this.user,
-                    pollOptions: this.form.options,
-                    finished: false
+                    pollOptions: this.form.options
                 }).then(response => {
                     console.log(response);
-                    this.$successMsg('Poll ' + this.form.name + ' successfully edited.');
+                    this.$successMsg('Description of poll ' + this.form.name + ' successfully edited.');
                     this.resetForm();
                     this.$emit('refreshPolls');
                 }).catch(err => {
