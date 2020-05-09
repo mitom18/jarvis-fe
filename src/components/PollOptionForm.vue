@@ -145,6 +145,7 @@
                 this.addPollOptions(modalId);
             },
             async addPollOptions(modalId) {
+                // FIXME icons should be always unique
                 await this.giveEmojisToOptions();
                 const newPollOptions = this.form.options.filter(o => {
                     return this.poll.pollOptions.filter(oo => o.name === oo.name).length === 0;
