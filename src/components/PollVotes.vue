@@ -30,16 +30,16 @@
                              class="cursorPointer ml-2">
                         Change vote
                     </b-badge>
-                    <b-badge variant="danger"
-                             class="cursorPointer ml-2">
+                    <b-badge
+                            v-if="!poll.finished && poll.pollOptions.length > 1 && user !== null && user.id === poll.author.id"
+                            @click="removeOption(poll, pollOption)"
+                            variant="danger"
+                            class="cursorPointer ml-2">
                         Remove option
                     </b-badge>
                 </li>
             </ol>
-            <b-badge variant="primary"
-                     class="cursorPointer ml-2">
-                Add option
-            </b-badge>
+            <PollOptionForm :poll="poll" @refreshPolls="$emit('refreshPolls')"/>
         </b-card-body>
     </b-card>
 </template>
@@ -47,9 +47,11 @@
 <script>
     import {mapGetters} from "vuex";
     import ApiService from "../services/api.service";
+    import PollOptionForm from "./PollOptionForm";
 
     export default {
         name: "PollVotes",
+        components: {PollOptionForm},
         props: ['poll'],
         data() {
             return {
@@ -113,6 +115,24 @@
                         .then(response => {
                             console.log(response);
                             this.$successMsg('You successfully changed your vote in poll ' + poll.name + ' to option ' + pollOption.name + '.');
+                            this.$emit('refreshPolls');
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            this.$errorMsg(err);
+                        })
+                }
+            },
+            removeOption(poll, pollOption) {
+                if (confirm(`Do you really want to remove poll option ${pollOption.name} from poll ${poll.name}?`)) {
+                    if (poll.pollOptions.length <= 1) {
+                        this.$errorMsg('Poll has to have at least 1 option.');
+                        return;
+                    }
+                    ApiService.delete(`/polls/${poll.id}/poll_options/${pollOption.id}`)
+                        .then(response => {
+                            console.log(response);
+                            this.$successMsg(`You successfully deleted poll option '${pollOption.name}' in poll '${poll.name}'.`);
                             this.$emit('refreshPolls');
                         })
                         .catch(err => {
