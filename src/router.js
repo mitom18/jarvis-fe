@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import LoginView from './views/LoginView.vue'
-import {TokenService} from './services/storage.service'
+import {TokenService, RedirectService} from './services/storage.service'
 
 Vue.use(Router);
 
@@ -58,10 +58,9 @@ router.beforeEach((to, from, next) => {
     const loggedIn = !!TokenService.getToken();
 
     if (!isPublic && !loggedIn) {
-        // TODO must store URI of the page user wanted to see to the user service
+        RedirectService.saveUri(to.fullPath); // Store the full path to redirect the user to after login
         return next({
-            path: '/login',
-            query: {redirect: to.fullPath}  // Store the full path to redirect the user to after login
+            path: '/login'
         });
     }
 

@@ -1,4 +1,5 @@
 const TOKEN_KEY = 'access_token';
+const REDIRECT_AFTER_LOGIN_URI = 'login_redirect_uri';
 
 /**
  * Manage how Access Tokens are being stored and retrieved from storage.
@@ -21,4 +22,24 @@ const TokenService = {
 
 };
 
-export {TokenService}
+
+/**
+ * Manage how login redirect URIs are being stored and retrieved from storage.
+ **/
+const RedirectService = {
+    getUri() {
+        return localStorage.getItem(REDIRECT_AFTER_LOGIN_URI)
+    },
+
+    saveUri(uri) {
+        localStorage.setItem(REDIRECT_AFTER_LOGIN_URI, uri)
+    },
+
+    removeUri() {
+        localStorage.removeItem(REDIRECT_AFTER_LOGIN_URI)
+    }
+
+};
+
+
+export {TokenService, RedirectService}

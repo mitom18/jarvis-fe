@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {TokenService} from '../services/storage.service'
+import {TokenService} from './storage.service'
 import store from '../store'
 
 const ApiService = {
@@ -62,6 +62,7 @@ const ApiService = {
             },
             async (error) => {
                 if (error.request.status === 401) {
+                    // Logout if error code was 401
                     await store.dispatch('auth/logout');
                 }
 
