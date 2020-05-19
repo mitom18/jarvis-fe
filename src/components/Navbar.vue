@@ -11,6 +11,7 @@
                         <router-link to="/notes" tag="b-nav-item">Notes</router-link>
                         <router-link to="/events" tag="b-nav-item">Events</router-link>
                         <router-link to="/polls" tag="b-nav-item">Polls</router-link>
+                        <router-link to="/picture2ascii" tag="b-nav-item">Picture2ASCII</router-link>
                         <b-nav-item-dropdown right>
                             <!-- Using 'button-content' slot -->
                             <template slot="button-content">{{user ? user.username : ""}}</template>

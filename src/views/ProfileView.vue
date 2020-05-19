@@ -5,7 +5,7 @@
             <b-card v-if="user">
                 <b-media>
                     <template v-slot:aside>
-                        <b-img blank blank-color="#ccc" width="64" alt="placeholder"></b-img>
+                        <b-avatar width="64"></b-avatar>
                     </template>
 
                     <table class="w-100">
