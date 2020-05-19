@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import LoginView from './views/LoginView.vue'
 import {TokenService, RedirectService} from './services/storage.service'
+import {UserService} from "./services/user.service";
 
 Vue.use(Router);
 
@@ -49,12 +50,21 @@ const router = new Router({
             name: 'picture2ascii',
             component: () => import('./views/Picture2Ascii.vue')
         },
+        {
+            path: '/registrations',
+            name: 'registrations',
+            component: () => import('./views/RegistrationApplications.vue'),
+            meta: {
+                onlyWhenAdmin: true
+            }
+        },
     ]
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     const isPublic = to.matched.some(record => record.meta.public);
     const onlyWhenLoggedOut = to.matched.some(record => record.meta.onlyWhenLoggedOut);
+    const onlyWhenAdmin = to.matched.some(record => record.meta.onlyWhenAdmin);
     const loggedIn = !!TokenService.getToken();
 
     if (!isPublic && !loggedIn) {
@@ -67,6 +77,14 @@ router.beforeEach((to, from, next) => {
     // Do not allow user to visit login page or register page if they are logged in
     if (loggedIn && onlyWhenLoggedOut) {
         return next('/')
+    }
+
+    // Do not allow user to visit admin pages when he is not admin
+    if (loggedIn && onlyWhenAdmin) {
+        const isAdmin = (await UserService.getUserInfo()).data.role === UserService.ADMIN_ROLE;
+        if (!isAdmin) {
+            return next('/')
+        }
     }
 
     next();

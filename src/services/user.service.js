@@ -12,6 +12,11 @@ class AuthenticationError extends Error {
 
 const UserService = {
     /**
+     * Constant string representing admin role.
+     */
+    ADMIN_ROLE: 'ADMIN',
+
+    /**
      * Authorize the user with their Discord account.
      **/
     authorize() {

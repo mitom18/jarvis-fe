@@ -11,6 +11,9 @@
                         <router-link to="/notes" tag="b-nav-item">Notes</router-link>
                         <router-link to="/events" tag="b-nav-item">Events</router-link>
                         <router-link to="/polls" tag="b-nav-item">Polls</router-link>
+                        <router-link v-if="this.user !== null && this.user.role === ADMIN_ROLE"
+                                     to="/registrations" tag="b-nav-item">Registrations
+                        </router-link>
                         <router-link to="/picture2ascii" tag="b-nav-item">Picture2ASCII</router-link>
                         <b-nav-item-dropdown right>
                             <!-- Using 'button-content' slot -->
@@ -26,6 +29,7 @@
 </template>
 
 <script>
+    import {UserService} from '../services/user.service';
     import {mapActions, mapGetters} from "vuex";
     import Clock from "./Clock";
 
@@ -35,7 +39,8 @@
         },
         data() {
             return {
-                user: null
+                user: null,
+                ADMIN_ROLE: UserService.ADMIN_ROLE
             }
         },
         computed: {
