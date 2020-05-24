@@ -72,7 +72,7 @@
         <div v-else-if="loading" class="d-flex justify-content-center">
             <b-spinner label="Loading..."></b-spinner>
         </div>
-        <b-alert v-else variant="secondary" :show="true">No registration applications found.</b-alert>
+        <b-alert v-else variant="secondary" :show="true">No {{selectedState}} registration applications found.</b-alert>
     </div>
 </template>
 

@@ -14,6 +14,9 @@
                         <router-link v-if="this.user !== null && this.user.role === ADMIN_ROLE"
                                      to="/registrations" tag="b-nav-item">Registrations
                         </router-link>
+                        <router-link v-if="this.user !== null && this.user.role === ADMIN_ROLE"
+                                     to="/users" tag="b-nav-item">Users
+                        </router-link>
                         <router-link to="/picture2ascii" tag="b-nav-item">Picture2ASCII</router-link>
                         <b-nav-item-dropdown right>
                             <!-- Using 'button-content' slot -->

@@ -58,6 +58,14 @@ const router = new Router({
                 onlyWhenAdmin: true
             }
         },
+        {
+            path: '/users',
+            name: 'users',
+            component: () => import('./views/Users.vue'),
+            meta: {
+                onlyWhenAdmin: true
+            }
+        },
     ]
 });
 
