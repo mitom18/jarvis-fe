@@ -105,6 +105,7 @@
                     })
                     .catch(err => {
                         console.error(err);
+                        this.$errorMsg(err);
                     })
                     .finally(() => this.loading = false);
             },

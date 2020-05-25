@@ -1,9 +1,12 @@
 <template>
     <div>
         <Navbar/>
-        <b-container class="pt-4">
+        <b-container class="pt-4 pb-4">
             <div class="mb-2">
-                <b-button size="sm" variant="primary" v-b-toggle.new-note-form><b-icon-plus/> New note</b-button>
+                <b-button size="sm" variant="primary" v-b-toggle.new-note-form>
+                    <b-icon-plus/>
+                    New note
+                </b-button>
                 <b-collapse id="new-note-form" class="mt-2">
                     <b-card>
                         <NoteForm @refreshNotes="handleRefresh"/>
@@ -40,7 +43,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>
