@@ -79,8 +79,13 @@
     }
 
     @media screen and (max-width: 992px) {
-        a.navbar-brand {
+        .navbar-brand {
             margin-right: 0;
+            flex-grow: 1;
+        }
+
+        .navbar-toggler {
+            margin-left: 1rem;
         }
     }
 </style>

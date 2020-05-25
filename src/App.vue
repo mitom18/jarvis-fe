@@ -32,4 +32,17 @@
         content: "*";
         color: red;
     }
+
+    /* webkit only scrollbar styles change */
+    body::-webkit-scrollbar {
+        width: .25rem;
+    }
+
+    body::-webkit-scrollbar-track {
+        background: black;
+    }
+
+    body::-webkit-scrollbar-thumb {
+        background: var(--secondary);
+    }
 </style>
