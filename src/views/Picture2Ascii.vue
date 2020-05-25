@@ -8,7 +8,7 @@
                     placeholder="Choose a file or drop it here..."
                     drop-placeholder="Drop file here..."
             ></b-form-file>
-            <p class="mt-3">Selected file: {{ file ? file.name : '' }}</p>
+            <p class="mt-3">{{ file ? `Selected file: ${file.name}` : 'Please select a file.' }}</p>
             <b-alert v-if="file"
                      variant="info"
                      show
