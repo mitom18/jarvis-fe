@@ -1,7 +1,7 @@
 <template>
     <div>
         <Navbar/>
-        <b-container class="pt-4">
+        <b-container class="pt-4 pb-4">
             <div class="mb-2">
                 <b-button size="sm" variant="primary" v-b-toggle.new-poll-form>
                     <b-icon-plus/>
@@ -43,7 +43,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

@@ -145,7 +145,6 @@
                 this.addPollOptions(modalId);
             },
             async addPollOptions(modalId) {
-                // FIXME icons should be always unique
                 await this.giveEmojisToOptions();
                 const newPollOptions = this.form.options.filter(o => {
                     return this.poll.pollOptions.filter(oo => o.name === oo.name).length === 0;
@@ -158,8 +157,8 @@
                 })
                 Promise.all(
                     promises
+                    // eslint-disable-next-line no-unused-vars
                 ).then(response => {
-                    console.log(response);
                     this.$successMsg('Poll options successfully added.');
                     this.resetForm();
                     this.$bvModal.hide(modalId);
@@ -170,11 +169,19 @@
                 });
             },
             async giveEmojisToOptions() {
+                const usedEmojis = this.poll.pollOptions.map(option => {
+                    return option.icon;
+                });
                 let emojis = (await ApiService.get('/discord_api/emojis')).data;
                 this.form.options = this.form.options.map(option => {
+                    let newIcon = emojis.pop();
+                    // find first icon that is not already used
+                    while (usedEmojis.filter(e => e.icon === newIcon).length > 0) {
+                        newIcon = emojis.pop();
+                    }
                     return {
                         ...option,
-                        icon: emojis.pop()
+                        icon: newIcon
                     }
                 });
             }

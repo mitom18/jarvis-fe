@@ -39,7 +39,7 @@
                     </b-badge>
                 </li>
             </ol>
-            <PollOptionForm :poll="poll" @refreshPolls="$emit('refreshPolls')"/>
+            <PollOptionForm v-if="!poll.finished" :poll="poll" @refreshPolls="$emit('refreshPolls')"/>
         </b-card-body>
     </b-card>
 </template>
@@ -86,39 +86,39 @@
             finish(poll) {
                 if (confirm('Do you really want to finish poll "' + poll.name + '"?')) {
                     ApiService.delete('/polls/' + poll.id + '/finish')
+                        // eslint-disable-next-line no-unused-vars
                         .then(response => {
-                            console.log(response);
                             this.$successMsg('You successfully finished poll ' + poll.name + '.');
                             this.$emit('refreshPolls');
                         })
                         .catch(err => {
-                            console.log(err);
+                            console.error(err);
                             this.$errorMsg(err);
                         })
                 }
             },
             vote(poll, pollOption) {
                 ApiService.post('/polls/' + poll.id + '/votes', pollOption)
+                    // eslint-disable-next-line no-unused-vars
                     .then(response => {
-                        console.log(response);
                         this.$successMsg('You successfully voted in poll ' + poll.name + ' for option ' + pollOption.name + '.');
                         this.$emit('refreshPolls');
                     })
                     .catch(err => {
-                        console.log(err);
+                        console.error(err);
                         this.$errorMsg(err);
                     })
             },
             changeVote(poll, pollOption) {
                 if (confirm(`Do you really want to change your vote to option ${pollOption.name}?`)) {
                     ApiService.put('/polls/' + poll.id + '/votes', pollOption)
+                        // eslint-disable-next-line no-unused-vars
                         .then(response => {
-                            console.log(response);
                             this.$successMsg('You successfully changed your vote in poll ' + poll.name + ' to option ' + pollOption.name + '.');
                             this.$emit('refreshPolls');
                         })
                         .catch(err => {
-                            console.log(err);
+                            console.error(err);
                             this.$errorMsg(err);
                         })
                 }
@@ -130,13 +130,13 @@
                         return;
                     }
                     ApiService.delete(`/polls/${poll.id}/poll_options/${pollOption.id}`)
+                        // eslint-disable-next-line no-unused-vars
                         .then(response => {
-                            console.log(response);
                             this.$successMsg(`You successfully deleted poll option '${pollOption.name}' in poll '${poll.name}'.`);
                             this.$emit('refreshPolls');
                         })
                         .catch(err => {
-                            console.log(err);
+                            console.error(err);
                             this.$errorMsg(err);
                         })
                 }
