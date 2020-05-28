@@ -18,21 +18,21 @@
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">{{userEntity.username}}</h5>
                     <b-button-group size="sm" class="mr-1">
-                        <b-button v-if="user !== null && userEntity.id !== user.id"
+                        <b-button v-if="user !== null && userEntity.id !== user.id && !userEntity.admin"
                                   size="sm"
                                   variant="primary"
                                   @click="promoteUser(userEntity)"
                         >
                             Promote
                         </b-button>
-                        <b-button v-if="user !== null && userEntity.id !== user.id"
+                        <b-button v-if="user !== null && userEntity.id !== user.id && userEntity.banned"
                                   size="sm"
                                   variant="success"
                                   @click="unbanUser(userEntity)"
                         >
                             Unban
                         </b-button>
-                        <b-button v-if="user !== null && userEntity.id !== user.id"
+                        <b-button v-if="user !== null && userEntity.id !== user.id && !userEntity.banned"
                                   size="sm"
                                   variant="danger"
                                   @click="banUser(userEntity)"
@@ -119,7 +119,7 @@
 
             promoteUser(userEntity) {
                 if (confirm('Do you really want to promote user "' + userEntity.username + '" to admin?')) {
-                    ApiService.put(`/users/${userEntity.username}/promotion`)
+                    ApiService.put(`/users/${encodeURIComponent(userEntity.username)}/promotion`)
                         // eslint-disable-next-line no-unused-vars
                         .then(response => {
                             this.$successMsg('User ' + userEntity.username + ' was successfully promoted to admin.');
@@ -134,7 +134,7 @@
 
             banUser(userEntity) {
                 if (confirm('Do you really want to ban user "' + userEntity.username + '"?')) {
-                    ApiService.delete('/users/' + userEntity.username)
+                    ApiService.delete('/users/' + encodeURIComponent(userEntity.username))
                         // eslint-disable-next-line no-unused-vars
                         .then(response => {
                             this.$successMsg('User ' + userEntity.username + ' was successfully banned.');
@@ -149,7 +149,7 @@
 
             unbanUser(userEntity) {
                 if (confirm('Do you really want to unban user "' + userEntity.username + '"?')) {
-                    ApiService.put('/users/' + userEntity.username)
+                    ApiService.put('/users/' + encodeURIComponent(userEntity.username))
                         // eslint-disable-next-line no-unused-vars
                         .then(response => {
                             this.$successMsg('User ' + userEntity.username + ' was successfully unbanned.');
