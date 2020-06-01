@@ -33,7 +33,7 @@
                         <b-button v-if="user !== null && event.author.id === user.id"
                                   size="sm"
                                   variant="warning"
-                                  v-b-modal="'edit-' + event.name"
+                                  v-b-modal="'edit-' + event.id"
                                   v-b-tooltip="'Edit event'"
                         >
                             <b-icon-pencil/>
@@ -42,7 +42,7 @@
                                   size="sm"
                                   variant="danger"
                                   @click="deleteEvent(event)"
-                                  v-b-tooltip="'Delete event'"
+                                  v-b-tooltip="'Cancel event'"
                         >
                             <b-icon-trash/>
                         </b-button>
@@ -66,9 +66,9 @@
                     </tr>
                 </table>
 
-                <b-modal v-if="user !== null && event.author.id === user.id" :id="'edit-' + event.name" centered
+                <b-modal v-if="user !== null && event.author.id === user.id" :id="'edit-' + event.id" centered
                          :title="event.name" hide-footer>
-                    <EventForm :event="event" @refreshEvents="handleRefresh('edit-' + event.name)"/>
+                    <EventForm :event="event" @refreshEvents="handleRefresh('edit-' + event.id)"/>
                 </b-modal>
 
                 <p class="mb-3">

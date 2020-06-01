@@ -64,10 +64,10 @@ const ApiService = {
                 if (error.request.status === 401) {
                     // Logout if error code was 401
                     await store.dispatch('auth/logout');
+                } else {
+                    // If error was not 401 just reject as is
+                    throw error
                 }
-
-                // If error was not 401 just reject as is
-                throw error
             }
         )
     },

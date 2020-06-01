@@ -52,4 +52,10 @@
     .main-header h1 {
         letter-spacing: .7rem;
     }
+
+    @media (max-width: 500px) {
+        .main-header h1 {
+            font-size: 2.5rem;
+        }
+    }
 </style>
